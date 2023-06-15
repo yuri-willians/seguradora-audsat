@@ -5,12 +5,15 @@ import com.audsat.seguradora.core.commons.exception.AttributeNotFoundException;
 import com.audsat.seguradora.core.commons.exception.BusinessRuleException;
 import com.audsat.seguradora.core.commons.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ResourceExceptionHandler {
+
+    private static final String INCOMPLETE_PAYLOAD = "Incomplete payload.";
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
@@ -28,6 +31,12 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(AttributeNotFoundException.class)
     public ResponseBase<Void> handle(final AttributeNotFoundException exception) {
         return ResponseBase.exception(exception.getMessage());
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseBase<Void> handle(final MethodArgumentNotValidException ignoredException) {
+        return ResponseBase.exception(INCOMPLETE_PAYLOAD);
     }
 
 }

@@ -1,11 +1,16 @@
 package com.audsat.seguradora.core.insurance.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class CreateInsuranceRequest {
 
+    @NotNull(message = "{value} cannot be null")
     private final Long idCustomer;
 
+    @NotNull(message = "{value} cannot be null")
     private final Long idCar;
 
+    @NotNull(message = "{value} cannot be null")
     private final Boolean isActive;
 
     public CreateInsuranceRequest(

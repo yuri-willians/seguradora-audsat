@@ -6,6 +6,7 @@ import com.audsat.seguradora.core.insurance.dto.CreateInsuranceResponse;
 import com.audsat.seguradora.core.insurance.dto.GetInsuranceByIdResponse;
 import com.audsat.seguradora.core.insurance.service.CreateInsurance;
 import com.audsat.seguradora.core.insurance.service.GetInsuranceDetailById;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class InsuranceController {
 
     @PostMapping("/budget")
     public ResponseEntity<ResponseBase<CreateInsuranceResponse>> create(
-            @RequestBody final CreateInsuranceRequest request
+            @Valid @RequestBody final CreateInsuranceRequest request
     ) {
         final var response = this.createInsurance.execute(request);
         return ResponseEntity
