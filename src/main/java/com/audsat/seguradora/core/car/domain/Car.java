@@ -1,9 +1,11 @@
 package com.audsat.seguradora.core.car.domain;
 
+import com.audsat.seguradora.core.cardriver.domain.CarDriver;
+import com.audsat.seguradora.core.claim.domain.Claim;
 import com.audsat.seguradora.core.commons.domain.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "car")
@@ -20,6 +22,12 @@ public class Car extends BaseEntity {
 
     @Column(name = "fipe_value", nullable = false)
     private Double fipe;
+
+    @OneToMany(mappedBy = "car")
+    private Set<CarDriver> carDrivers;
+
+    @OneToMany(mappedBy = "car")
+    private Set<Claim> claims;
 
     public Car() {
     }

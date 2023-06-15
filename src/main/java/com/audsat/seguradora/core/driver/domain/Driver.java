@@ -1,8 +1,10 @@
 package com.audsat.seguradora.core.driver.domain;
 
 import com.audsat.seguradora.core.commons.domain.BaseEntity;
+import com.audsat.seguradora.core.customer.domain.Customer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -17,17 +19,22 @@ public class Driver extends BaseEntity {
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
+    @OneToOne(mappedBy = "driver")
+    private Customer customer;
+
     public Driver() {
     }
 
     public Driver(
             final Long id,
             final String document,
-            final LocalDate birthdate
+            final LocalDate birthdate,
+            final Customer customer
     ) {
         super(id);
         this.document = document;
         this.birthdate = birthdate;
+        this.customer = customer;
     }
 
     public String getDocument() {
@@ -44,5 +51,13 @@ public class Driver extends BaseEntity {
 
     public void setBirthdate(final LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public void setCustomer(final Customer customer) {
+        this.customer = customer;
     }
 }

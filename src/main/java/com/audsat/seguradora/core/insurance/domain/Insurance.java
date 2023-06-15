@@ -2,10 +2,12 @@ package com.audsat.seguradora.core.insurance.domain;
 
 import com.audsat.seguradora.core.car.domain.Car;
 import com.audsat.seguradora.core.commons.domain.BaseEntity;
+import com.audsat.seguradora.core.commons.exception.AttributeNotFoundException;
 import com.audsat.seguradora.core.customer.domain.Customer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "insurance")
@@ -90,5 +92,31 @@ public class Insurance extends BaseEntity {
 
     public void setActive(final boolean active) {
         this.active = active;
+    }
+
+    @Transient
+    public Long getIdCustomer() {
+        return Optional.ofNullable(this.customer)
+                .map(BaseEntity::getId)
+                .orElse(null);
+    }
+
+    @Transient
+    public Long getIdCar() {
+        return Optional.ofNullable(this.car)
+                .map(BaseEntity::getId)
+                .orElse(null);
+    }
+
+    @Transient
+    public Double getBudget(final int taxMultiplier, final double tax) {
+        return this.getFipe() * (tax * taxMultiplier);
+    }
+
+    @Transient
+    private Double getFipe() {
+        return Optional.ofNullable(this.car)
+                .map(Car::getFipe)
+                .orElseThrow(() -> new AttributeNotFoundException("Fipe value not found."));
     }
 }
