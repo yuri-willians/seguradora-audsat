@@ -2,6 +2,8 @@ package com.audsat.seguradora.core.insurance.service;
 
 import com.audsat.seguradora.core.car.domain.Car;
 import com.audsat.seguradora.core.car.service.GetCarById;
+import com.audsat.seguradora.core.cardriver.service.VerifyIfCustomerIsMainCarDriver;
+import com.audsat.seguradora.core.commons.exception.BusinessRuleException;
 import com.audsat.seguradora.core.commons.service.GetEntityById;
 import com.audsat.seguradora.core.customer.domain.Customer;
 import com.audsat.seguradora.core.customer.service.GetCustomerById;
@@ -20,6 +22,8 @@ public class CreateInsurance {
 
     private final InsuranceRepository repository;
 
+    private final VerifyIfCustomerIsMainCarDriver verifyIfCustomerIsMainCarDriver;
+
     private final GetEntityById<Car> getCarById;
 
     private final GetEntityById<Customer> getCustomerById;
@@ -27,26 +31,40 @@ public class CreateInsurance {
     @Autowired
     public CreateInsurance(
             final InsuranceRepository repository,
+            final VerifyIfCustomerIsMainCarDriver verifyIfCustomerIsMainCarDriver,
             final GetCarById getCarById,
             final GetCustomerById getCustomerById
     ) {
         this.repository = repository;
+        this.verifyIfCustomerIsMainCarDriver = verifyIfCustomerIsMainCarDriver;
         this.getCarById = getCarById;
         this.getCustomerById = getCustomerById;
     }
 
 
     public CreateInsuranceResponse execute(final CreateInsuranceRequest request) {
-        final var insurance = this.buildInsurance(request);
+        final var car = this.getCar(request);
+        final var customer = this.getCustomer(request);
+        this.checkIfCustomerIsMainDriver(request);
+        final var insurance = this.buildInsurance(request, customer, car);
         final var savedInsurance = this.repository.save(insurance);
         return CreateInsuranceResponse.of(savedInsurance);
     }
 
-    private Insurance buildInsurance(final CreateInsuranceRequest request) {
+    private void checkIfCustomerIsMainDriver(final CreateInsuranceRequest request) {
+        final var isMainCarDriver = this.verifyIfCustomerIsMainCarDriver.execute(request.getIdCustomer(), request.getIdCar());
+        if (!isMainCarDriver) throw new BusinessRuleException("Customer is not car main driver.");
+    }
+
+    private Insurance buildInsurance(
+            final CreateInsuranceRequest request,
+            final Customer customer,
+            final Car car
+    ) {
         return InsuranceBuilder.anInsurance()
-                .withCar(this.getCar(request))
+                .withCar(car)
+                .withCustomer(customer)
                 .withActive(request.getActive())
-                .withCustomer(this.getCustomer(request))
                 .withCreationDate(LocalDateTime.now())
                 .build();
     }
