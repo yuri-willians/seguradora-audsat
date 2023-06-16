@@ -20,7 +20,7 @@ Ao subir a aplicação, o Swagger ficara disponível em:
 
 ## Diagrama Arquitetural
 
-![diagram-audsat-svg](https://github.com/yuri-willians/seguradora-audsat/assets/42418401/49c6c9a3-c22a-4a03-b33d-86fd3faddb31)
+![diagram-audsat-svg](https://github.com/yuri-willians/seguradora-audsat/assets/42418401/eb36f382-890a-4893-b5b8-e3fbf802f4c1)
 
 ## Documentação da API
 
