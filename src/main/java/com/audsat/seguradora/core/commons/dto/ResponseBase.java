@@ -34,6 +34,14 @@ public class ResponseBase<T> {
         );
     }
 
+    public static <T> ResponseBase<T> success() {
+        return new ResponseBase<>(
+                true,
+                null,
+                null
+        );
+    }
+
     public boolean isSuccess() {
         return this.success;
     }
