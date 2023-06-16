@@ -51,7 +51,7 @@ Para fazer o deploy desse projeto rode, dentro da pasta do projeto:
 #### Atualização de Orçamento
 
 ```
-  PUT /seguradora-audsat/insurance/budget
+  PUT /seguradora-audsat/insurance/budget/{insuranceId}
 ```
 
 ##### Request
@@ -64,11 +64,12 @@ Para fazer o deploy desse projeto rode, dentro da pasta do projeto:
 }
 ```
 
-| Parâmetro    | Tipo      | Descrição               |
-|:-------------|:----------|:------------------------|
-| `idCustomer` | `number`  | ID do cliente           |
-| `idCar`      | `number`  | ID do carro             |
-| `isActive`   | `boolean` | Flag de orçamento ativo |
+| Parâmetro     | Tipo      | Descrição               |
+|:--------------|:----------|:------------------------|
+| `insuranceId` | `number`  | ID do orçamento         |
+| `idCustomer`  | `number`  | ID do cliente           |
+| `idCar`       | `number`  | ID do carro             |
+| `isActive`    | `boolean` | Flag de orçamento ativo |
 
 ##### Response
 
@@ -122,4 +123,29 @@ Para fazer o deploy desse projeto rode, dentro da pasta do projeto:
   "message": null
 }
 ```
+
+---
+
+#### Remoção de Orçamento
+
+```
+  DELETE /seguradora-audsat/insurance/budget/{insuranceId}
+```
+
+##### Request
+
+| Parâmetro     | Tipo     | Descrição       |
+|:--------------|:---------|:----------------|
+| `insuranceId` | `number` | ID do orçamento |
+
+##### Response
+
+```json
+{
+  "success": true,
+  "data": null,
+  "message": null
+}
+```
+
 
