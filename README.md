@@ -18,6 +18,11 @@ Ao subir a aplicação, o Swagger ficara disponível em:
   localhost:8080/seguradora-audsat/swagger-ui.html
 ```
 
+## Diagrama Arquitetural
+
+![diagram-audsat](https://github.com/yuri-willians/seguradora-audsat/assets/42418401/a1075c53-1e61-4552-bf63-0aa62c26ac79)
+
+
 ## Documentação da API
 
 #### Cadastro de Orçamento
