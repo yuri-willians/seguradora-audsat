@@ -47,14 +47,14 @@ public class CreateInsurance {
     public CreateInsuranceResponse execute(final CreateInsuranceRequest request) {
         final var car = this.getCar(request);
         final var customer = this.getCustomer(request);
-        this.checkIfCustomerIsMainDriver(request);
+        this.checkIfCustomerIsMainDriver(request.getIdCustomer(), request.getIdCar());
         final var insurance = this.buildInsurance(request, customer, car);
         final var savedInsurance = this.repository.save(insurance);
         return CreateInsuranceResponse.of(savedInsurance);
     }
 
-    private void checkIfCustomerIsMainDriver(final CreateInsuranceRequest request) {
-        final var isMainCarDriver = this.verifyIfCustomerIsMainCarDriver.execute(request.getIdCustomer(), request.getIdCar());
+    private void checkIfCustomerIsMainDriver(final Long idCustomer, final Long idCar) {
+        final var isMainCarDriver = this.verifyIfCustomerIsMainCarDriver.execute(idCustomer, idCar);
         if (!isMainCarDriver) throw new BusinessRuleException(CUSTOMER_IS_NOT_CAR_MAIN_DRIVER);
     }
 

@@ -10,8 +10,8 @@ public class CreateInsuranceResponse {
         this.idInsurance = idInsurance;
     }
 
-    public static CreateInsuranceResponse of(final Insurance savedInsurance) {
-        return new CreateInsuranceResponse(savedInsurance.getId());
+    public static CreateInsuranceResponse of(final Insurance insurance) {
+        return new CreateInsuranceResponse(insurance.getId());
     }
 
     public Long getIdInsurance() {
