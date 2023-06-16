@@ -15,7 +15,7 @@ Para fazer o deploy desse projeto rode, dentro da pasta do projeto:
 Ao subir a aplicação, o Swagger ficara disponível em:
 
 ```
-localhost:8080/seguradora-audsat/swagger-ui.html
+  localhost:8080/seguradora-audsat/swagger-ui.html
 ```
 
 ## Documentação da API
