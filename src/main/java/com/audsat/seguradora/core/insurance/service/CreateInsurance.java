@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 @Component
 public class CreateInsurance {
 
+    private static final String CUSTOMER_IS_NOT_CAR_MAIN_DRIVER = "Customer is not car main driver.";
+
     private final InsuranceRepository repository;
 
     private final VerifyIfCustomerIsMainCarDriver verifyIfCustomerIsMainCarDriver;
@@ -53,7 +55,7 @@ public class CreateInsurance {
 
     private void checkIfCustomerIsMainDriver(final CreateInsuranceRequest request) {
         final var isMainCarDriver = this.verifyIfCustomerIsMainCarDriver.execute(request.getIdCustomer(), request.getIdCar());
-        if (!isMainCarDriver) throw new BusinessRuleException("Customer is not car main driver.");
+        if (!isMainCarDriver) throw new BusinessRuleException(CUSTOMER_IS_NOT_CAR_MAIN_DRIVER);
     }
 
     private Insurance buildInsurance(
