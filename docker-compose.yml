@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    build: ./
+    restart: on-failure
+    ports:
+      - "8080:8332"
+    volumes:
+      - /data/seguradora:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
