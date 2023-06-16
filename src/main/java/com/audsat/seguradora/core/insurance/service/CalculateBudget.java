@@ -1,7 +1,8 @@
 package com.audsat.seguradora.core.insurance.service;
 
+import com.audsat.seguradora.core.claim.service.CheckIfCarHasClaim;
+import com.audsat.seguradora.core.claim.service.CheckIfCustomerHasClaim;
 import com.audsat.seguradora.core.insurance.domain.Insurance;
-import com.audsat.seguradora.core.insurance.repository.InsuranceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +12,26 @@ import java.util.function.Function;
 @Component
 public class CalculateBudget {
 
-    private static final double TAX = 0.2;
+    private static final double TAX = 0.02;
 
-    private static final Long MIN_AGE = 18L;
+    private static final double BASE_TAX = 0.06;
 
-    private static final Long MAX_AGE = 25L;
+    private final CheckIfCarHasClaim checkIfCarHasClaim;
 
-    private final InsuranceRepository repository;
+    private final CheckIfCustomerHasClaim checkIfCustomerHasClaim;
+
+    private final CheckIfCustomerIsBetweenAgePeriod checkIfCustomerIsBetweenAgePeriod;
+
 
     @Autowired
-    public CalculateBudget(final InsuranceRepository repository) {
-        this.repository = repository;
+    public CalculateBudget(
+            final CheckIfCarHasClaim checkIfCarHasClaim,
+            final CheckIfCustomerHasClaim checkIfCustomerHasClaim,
+            final CheckIfCustomerIsBetweenAgePeriod checkIfCustomerIsBetweenAgePeriod
+    ) {
+        this.checkIfCarHasClaim = checkIfCarHasClaim;
+        this.checkIfCustomerHasClaim = checkIfCustomerHasClaim;
+        this.checkIfCustomerIsBetweenAgePeriod = checkIfCustomerIsBetweenAgePeriod;
     }
 
     private static AtomicInteger handleFipeTax(
@@ -36,33 +46,23 @@ public class CalculateBudget {
     }
 
     public Double execute(final Insurance insurance) {
-        final var fipeTaxMultiplier = new AtomicInteger(1);
+        final var fipeTaxMultiplier = new AtomicInteger(0);
         handleFipeTax(this::isCustomerBetweenAgePeriod, insurance, fipeTaxMultiplier);
-        handleFipeTax(this::driverHasAnotherInsurance, insurance, fipeTaxMultiplier);
-        handleFipeTax(this::carHasAnotherInsurance, insurance, fipeTaxMultiplier);
-        return insurance.getBudget(fipeTaxMultiplier.get(), TAX);
+        handleFipeTax(this::customerHasClaim, insurance, fipeTaxMultiplier);
+        handleFipeTax(this::carHasClaim, insurance, fipeTaxMultiplier);
+        return insurance.getBudget(fipeTaxMultiplier.get(), TAX, BASE_TAX);
     }
 
-    private Boolean carHasAnotherInsurance(final Insurance insurance) {
-        return this.repository.carHasAnotherInsurance(
-                insurance.getId(),
-                insurance.getIdCar()
-        );
+    private Boolean carHasClaim(final Insurance insurance) {
+        return this.checkIfCarHasClaim.execute(insurance.getIdCar());
     }
 
-    private Boolean driverHasAnotherInsurance(final Insurance insurance) {
-        return this.repository.driverHasAnotherInsurance(
-                insurance.getId(),
-                insurance.getIdCustomer()
-        );
+    private Boolean customerHasClaim(final Insurance insurance) {
+        return this.checkIfCustomerHasClaim.execute(insurance.getIdCustomer());
     }
 
     private Boolean isCustomerBetweenAgePeriod(final Insurance insurance) {
-        return this.repository.isCustomerBetweenAgePeriod(
-                insurance.getId(),
-                MIN_AGE,
-                MAX_AGE
-        );
+        return this.checkIfCustomerIsBetweenAgePeriod.execute(insurance.getId());
     }
 
 }

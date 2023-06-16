@@ -17,22 +17,4 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
             AND insurance.id = :idInsurance
             """)
     Boolean isCustomerBetweenAgePeriod(Long idInsurance, Long minAge, Long maxAge);
-
-    @Query("""
-            SELECT CASE WHEN COUNT(insurance.id) > 0 THEN TRUE ELSE FALSE END
-            FROM Insurance insurance
-            JOIN insurance.customer customer
-            WHERE customer.id = :idCustomer
-            AND insurance.id <> :idInsurance
-            """)
-    Boolean driverHasAnotherInsurance(Long idInsurance, Long idCustomer);
-
-    @Query("""
-            SELECT CASE WHEN COUNT(insurance.id) > 0 THEN TRUE ELSE FALSE END
-            FROM Insurance insurance
-            JOIN insurance.car car
-            WHERE car.id = :idCar
-            AND insurance.id <> :idInsurance
-            """)
-    Boolean carHasAnotherInsurance(Long idInsurance, Long idCar);
 }

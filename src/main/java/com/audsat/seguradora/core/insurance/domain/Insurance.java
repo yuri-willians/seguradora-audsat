@@ -109,8 +109,12 @@ public class Insurance extends BaseEntity {
     }
 
     @Transient
-    public Double getBudget(final int taxMultiplier, final double tax) {
-        return this.getFipe() * (tax * taxMultiplier);
+    public Double getBudget(
+            final int taxMultiplier,
+            final double tax,
+            final double baseTax
+    ) {
+        return this.getFipe() * (baseTax + (tax * taxMultiplier));
     }
 
     @Transient
