@@ -7,12 +7,12 @@ Projeto feito como teste técnico Java do processo seletivo para a vaga de desen
 Para fazer o deploy desse projeto rode, dentro da pasta do projeto:
 
 ```bash
-  docker-compose up
+  docker-compose up --build
 ```
 
 ## Swagger
 
-Ao subir a aplicação, o Swagger ficara disponível em:
+Ao subir a aplicação, o Swagger ficará disponível em:
 
 ```
   localhost:8080/seguradora-audsat/swagger-ui.html
