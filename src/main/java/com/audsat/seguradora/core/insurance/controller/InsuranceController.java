@@ -74,7 +74,7 @@ public class InsuranceController {
     ) {
         this.deleteInsurance.execute(idInsurance);
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .status(HttpStatus.ACCEPTED)
                 .body(ResponseBase.success());
     }
 
